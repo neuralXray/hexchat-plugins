@@ -1,0 +1,59 @@
+# -*- coding: UTF-8 -*-
+
+__module_name__        = 'Away'
+__module_version__     = '1.0'
+__module_description__ = 'Notice nick mentions if away'
+
+
+import hexchat
+
+import sys
+sys.path.insert(0, hexchat.get_info('configdir'))
+from hexchat_utils import colored_nicks_loaded
+
+from re import search, IGNORECASE
+
+
+is_colored_nicks_loaded = colored_nicks_loaded()
+noticed_nicks = []
+
+
+def away_hook(word, word_eol, userdata):
+    global noticed_nicks
+    nick = hexchat.strip(word[0])
+    connection_id = hexchat.get_prefs('id')
+    noticed_nick_id = (connection_id, nick)
+    away = hexchat.get_info('away')
+
+    if (away is not None) & (noticed_nick_id not in noticed_nicks):
+        noticed_nicks.append(noticed_nick_id)
+        hexchat.command(f"notice {nick} I'm away ({away})")
+
+    if is_colored_nicks_loaded:
+        return hexchat.EAT_HEXCHAT
+    else:
+        return hexchat.EAT_NONE
+
+
+def back_hook(word, word_eol, userdata):
+    global noticed_nicks
+
+    noticed_nicks = []
+
+    return hexchat.EAT_NONE
+
+
+hexchat.hook_print('Channel Msg Hilight', away_hook)
+hexchat.hook_print('Channel Action Hilight', away_hook)
+
+hexchat.hook_print('Private Message to Dialog', away_hook)
+hexchat.hook_print('Private Message', away_hook)
+hexchat.hook_print('Private Action to Dialog', away_hook)
+hexchat.hook_print('Private Action', away_hook)
+hexchat.hook_print('Notice', away_hook)
+
+hexchat.hook_command('back', back_hook)
+
+
+print(__module_name__, 'loaded')
+
