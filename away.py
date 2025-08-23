@@ -8,13 +8,23 @@ __module_description__ = 'Notice nick mentions if away'
 import hexchat
 
 import sys
-sys.path.insert(0, hexchat.get_info('configdir'))
+configdir = hexchat.get_info('configdir')
+sys.path.insert(0, configdir)
 from hexchat_utils import colored_nicks_loaded
 
 from re import search, IGNORECASE
 
 
+file = open(configdir + '/addons/away.conf')
+lines = file.readlines()
+file.close()
+
 is_colored_nicks_loaded = colored_nicks_loaded()
+exceptions = lines[0][:-1]
+if exceptions:
+    exceptions = [exception.lower() for exception in exceptions.split(',')]
+else:
+    exceptions = []
 noticed_nicks = []
 
 
@@ -25,9 +35,40 @@ def away_hook(word, word_eol, userdata):
     noticed_nick_id = (connection_id, nick)
     away = hexchat.get_info('away')
 
-    if (away is not None) & (noticed_nick_id not in noticed_nicks):
+    if (away is not None) and (noticed_nick_id not in noticed_nicks) and \
+       (nick.lower() not in exceptions):
         noticed_nicks.append(noticed_nick_id)
         hexchat.command(f"notice {nick} I'm away ({away})")
+
+    if is_colored_nicks_loaded:
+        return hexchat.EAT_HEXCHAT
+    else:
+        return hexchat.EAT_NONE
+
+
+def message_send(word, word_eol, userdata):
+    # hexchat.prnt('Message Send')
+    # hexchat.prnt(', '.join(word))
+    global exceptions
+    nick = word[0].lower()
+
+    if nick not in exceptions:
+        exceptions.append(nick)
+
+    if is_colored_nicks_loaded:
+        return hexchat.EAT_HEXCHAT
+    else:
+        return hexchat.EAT_NONE
+
+
+def your_message(word, word_eol, userdata):
+    # hexchat.prnt('Your Message')
+    # hexchat.prnt(', '.join(word))
+    global exceptions
+    context = hexchat.get_info('channel').lower()
+
+    if (context[0] != '#') and (context not in exceptions):
+        exceptions.append(context)
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
@@ -51,6 +92,9 @@ hexchat.hook_print('Private Message', away_hook)
 hexchat.hook_print('Private Action to Dialog', away_hook)
 hexchat.hook_print('Private Action', away_hook)
 hexchat.hook_print('Notice', away_hook)
+
+hexchat.hook_print('Your Message', your_message)
+hexchat.hook_print('Message Send', message_send)
 
 hexchat.hook_command('back', back_hook)
 
