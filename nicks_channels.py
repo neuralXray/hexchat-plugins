@@ -11,19 +11,17 @@ import hexchat
 import sys
 configdir = hexchat.get_info('configdir')
 sys.path.insert(0, configdir)
-from hexchat_utils import colored_nick, server_context, colored_nicks_loaded
-from utils import find_nicks, \
-                  printout_nick_history, printout_channel_history, \
+from hexchat_utils import colored_nick, server_context, colored_nicks_loaded, printout_nick_history
+from utils import find_nicks, printout_channel_history, \
                   printout_first_seen, printout_last_seen, printout_first_and_last_seen
 
 from threading import Thread
-from os import getenv
+from os.path import expanduser
 from time import sleep
 
 
 logs_directory = configdir + '/logs/'
-username = getenv('USER')
-additional_logs_directory = '/home/' + username + '/Documents/IRC/logs/'
+additional_logs_directory = expanduser('~/Documents/IRC/logger/logs/')
 
 
 is_colored_nicks_loaded = colored_nicks_loaded()
@@ -40,7 +38,7 @@ def search_thread():
             searching = True
 
             for nick, ident, ip, host, logs_dir, months, connection_id in search_queue:
-                channel_history, nick_history, first_seen, last_seen = \
+                channel_history, nick_history, ident_history, first_seen, last_seen = \
                 find_nicks(nick, ident, ip, host, logs_dir, months)
 
                 printout_queue = []
@@ -51,8 +49,7 @@ def search_thread():
                         else:
                             col_nick = nick
                         nick_history = [colored_nick(n) for n in nick_history]
-                        context = server_context(connection_id)
-                    printout = printout_nick_history(nick_history, col_nick, ident, ip)
+                    printout = printout_nick_history(nick_history, ident_history, col_nick, ident, ip)
                     printout_queue.append(printout)
                 if channel_history:
                     printout = printout_channel_history(channel_history, col_nick, ident, ip)
@@ -66,6 +63,17 @@ def search_thread():
                         printout_queue.append(printout)
                         printout = printout_last_seen(last_seen, col_nick)
                         printout_queue.append(printout)
+                else:
+                    if is_colored_nicks_loaded:
+                        if nick != '*':
+                            col_nick = colored_nick(nick)
+                        else:
+                            col_nick = nick
+                    printout = f'*\t[{col_nick}!{ident}@{ip}] Not seen'
+                    printout_queue.append(printout)
+
+                if is_colored_nicks_loaded:
+                    context = server_context(connection_id)
                 for printout in printout_queue:
                     if is_colored_nicks_loaded:
                         context.prnt(printout)
@@ -83,7 +91,7 @@ def whois_name_line(word, word_eol, userdata):
     global search_queue
     nick = word[0]
     ident = word[1]
-    ip = word[2]
+    ip = hexchat.strip(word[2])
     # real_name = hexchat.strip(word[3])
     host = hexchat.get_info('host')
     connection_id = hexchat.get_prefs('id')
@@ -108,13 +116,13 @@ def nicks_channels(word, word_eol, userdata):
         except ValueError:
             return hexchat.EAT_ALL
     else:
-        months = 2
+        months = 1
 
-    if (len(word) == 2) | (len(word) == 3):
+    if (len(word) == 2) or (len(word) == 3):
         user = word[1]
         i = user.find('!')
         j = user.find('@')
-        if (i != -1) & (j != -1):
+        if (i != -1) and (j != -1):
             nick = user[:i]
             ident = user[i + 1:j]
             ip = user[j + 1:]
