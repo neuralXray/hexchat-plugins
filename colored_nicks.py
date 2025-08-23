@@ -1283,24 +1283,32 @@ def channel_ban(word, word_eol, userdata):
     entity = word[0]
     objective = word[1]
 
+    if objective.startswith('m:'):
+        mode = 'mute'
+        objective = objective[objective.find('m:') + 2:]
+    else:
+        mode = 'ban'
+
     if ':' not in objective:
         objective_nick, objective_username, objective_host = user_fields_extractor(objective)
         if '*' in objective_nick:
             objective = objective_nick + '!' + objective_username + '@' + objective_host
         else:
-            objective = reset + objective_nick + color + ban_color + '!' + objective_username + '@' + objective_host
+            objective = reset + objective_nick + color + ban_color + '!' + objective_username + \
+                        '@' + objective_host
 
     if '.' in entity:
-        printout = '*\t' + color + ban_color + entity + ' sets ban on ' + objective
+        printout = '*\t' + color + ban_color + entity + f' sets {mode} on ' + objective
     else:
         entity = colored_nick(entity)
-        printout = '*\t' + entity + color + ban_color + ' sets ban on ' + objective
+        printout = '*\t' + entity + color + ban_color + f' sets {mode} on ' + objective
 
     hexchat.prnt(printout)
     if ':' not in objective:
         my_nick, my_username, my_host = my_nick_host()
         my_user = f'{my_nick}!{my_username}@{my_host}'
-        if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+        if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
+                  .replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
             hexchat.command('GUI COLOR 3')
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
@@ -1320,26 +1328,34 @@ def channel_unban(word, word_eol, userdata):
     entity = word[0]
     objective = word[1]
 
+    if objective.startswith('m:'):
+        mode = 'mute'
+        objective = objective[objective.find('m:') + 2:]
+    else:
+        mode = 'ban'
+
     if ':' not in objective:
         objective_nick, objective_username, objective_host = user_fields_extractor(objective)
         if '*' in objective_nick:
             colored_objective = objective_nick + '!' + objective_username + '@' + objective_host
         else:
-            colored_objective = reset + objective_nick + color + unban_color + '!' + objective_username + '@' + objective_host
+            colored_objective = reset + objective_nick + color + unban_color + '!' + \
+                                objective_username + '@' + objective_host
     else:
         colored_objective = objective
 
     if '.' in entity:
-        printout = '*\t' + color + unban_color + entity + ' removes ban on ' + colored_objective
+        printout = '*\t' + color + unban_color + entity + f' removes {mode} on ' + colored_objective
     else:
         entity = colored_nick(entity)
-        printout = '*\t' + entity + color + unban_color + ' removes ban on ' + colored_objective
+        printout = '*\t' + entity + color + unban_color + f' removes {mode} on ' + colored_objective
 
     hexchat.prnt(printout)
     if ':' not in objective:
         my_nick, my_username, my_host = my_nick_host()
         my_user = f'{my_nick}!{my_username}@{my_host}'
-        if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+        if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
+                  .replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
             hexchat.command('GUI COLOR 3')
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
@@ -1356,12 +1372,21 @@ def ban_list(word, word_eol, userdata):
     # hexchat.prnt('Ban List')
     # hexchat.prnt(', '.join(word))
     channel = word[0]
-    banned_nick, banned_username, banned_host = user_fields_extractor(word[1])
+    objective = word[1]
     nick = word[2]
     datetime = word[3]
 
-    printout = '*\t' + color + ban_color + channel + ': ' + \
-               banned_nick + color + ban_color + '!' + banned_username + '@' + banned_host + \
+    if ':' not in objective:
+        objective_nick, objective_username, objective_host = user_fields_extractor(objective)
+        if '*' in objective_nick:
+            colored_objective = objective_nick + '!' + objective_username + '@' + objective_host
+        else:
+            colored_objective = reset + objective_nick + color + ban_color + '!' + \
+                                objective_username + '@' + objective_host
+    else:
+        colored_objective = objective
+
+    printout = '*\t' + color + ban_color + channel + ': ' + colored_objective + \
                ' on ' + datetime + ' by '
     if '.' not in nick:
         nick = colored_nick(nick)
