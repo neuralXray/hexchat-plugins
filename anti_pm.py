@@ -23,7 +23,7 @@ textex = lines[1][:-1]
 is_colored_nicks_loaded = colored_nicks_loaded()
 exceptions = lines[2][:-1]
 if exceptions:
-    exceptions = exceptions.split(',')
+    exceptions = [exception.lower() for exception in exceptions.split(',')]
 else:
     exceptions = []
 ignores = []
@@ -53,7 +53,7 @@ def your_message(word, word_eol, userdata):
     global exceptions
     context = hexchat.get_info('channel').lower()
 
-    if (context[0] != '#') & (context not in exceptions):
+    if (context[0] != '#') and (context not in exceptions):
         exceptions.append(context)
 
     if is_colored_nicks_loaded:
