@@ -38,8 +38,16 @@ def search_thread():
             searching = True
 
             for nick, ident, ip, host, logs_dir, months, connection_id in search_queue:
+                if ident == '*':
+                    ident_search = ''
+                else:
+                    ident_search = ident
+                if ip == '*':
+                    ip_search = ''
+                else:
+                    ip_search = ip
                 channel_history, nick_history, ident_history, first_seen, last_seen = \
-                find_nicks(nick, ident, ip, host, logs_dir, months)
+                find_nicks(nick, ident_search, ip_search, host, logs_dir, months)
 
                 printout_queue = []
                 if nick_history:
