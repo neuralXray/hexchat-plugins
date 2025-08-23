@@ -23,11 +23,11 @@ from re import search
 user_name = getenv('USER')
 music_directory = '/home/' + user_name + '/Music/'
 
-start_regex = '^\[[0-9]{2}\:[0-9]{2}\.[0-9]{2}\]'
+start_regex = '^\[[0-9]{2}\:[0-9]{2}\.[0-9]{2,3}\]'
 lyric_time_format = '%M:%S.%f'
 
 minutes_regex = '^\[[0-9]{2}\:'
-seconds_regex = ':[0-9]{2}\.[0-9]{2}\]'
+seconds_regex = ':[0-9]{2}\.[0-9]{2,3}\]'
 start_regex = minutes_regex + seconds_regex[1:]
 
 busy = False
