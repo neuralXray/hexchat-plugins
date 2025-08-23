@@ -93,13 +93,12 @@ def ban_command(word, word_eol, userdata):
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
             key = (connection_id, channel)
-            regex = word[2]
+            regex = word_eol[2]
 
             if key in bans.keys():
                 bans[key] = bans[key] + [regex]
             else:
                 bans[key] = [regex]
-            print(bans)
 
             return hexchat.EAT_ALL
     return hexchat.EAT_NONE
