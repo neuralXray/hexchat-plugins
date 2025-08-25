@@ -84,6 +84,15 @@ def back_hook(word, word_eol, userdata):
     return hexchat.EAT_NONE
 
 
+def away_back_hook(word, word_eol, userdata):
+    if (hexchat.get_info('away') is not None):
+        hexchat.command('back')
+
+        return hexchat.EAT_ALL
+    else:
+        return hexchat.EAT_NONE
+
+
 hexchat.hook_print('Channel Msg Hilight', away_hook)
 hexchat.hook_print('Channel Action Hilight', away_hook)
 
@@ -97,6 +106,7 @@ hexchat.hook_print('Your Message', your_message)
 hexchat.hook_print('Message Send', message_send)
 
 hexchat.hook_command('back', back_hook)
+hexchat.hook_command('away', away_back_hook)
 
 
 print(__module_name__, 'loaded')
