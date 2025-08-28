@@ -2,7 +2,7 @@
 
 __module_name__        = 'CHaN'
 __module_version__     = '1.0'
-__module_description__ = 'Automated & hidden operator actions'
+__module_description__ = 'Automated and hidden channel operator actions.'
 
 # Pendiente: pillar exempts a akicks para eliminarlas automaticamente
 

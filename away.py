@@ -2,7 +2,7 @@
 
 __module_name__        = 'Away'
 __module_version__     = '1.0'
-__module_description__ = 'Notice nick mentions if away'
+__module_description__ = 'Notice nick mentions and private messages if marked as away.'
 
 
 import hexchat
@@ -25,6 +25,7 @@ if exceptions:
     exceptions = [exception.lower() for exception in exceptions.split(',')]
 else:
     exceptions = []
+
 noticed_nicks = []
 
 

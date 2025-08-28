@@ -1,9 +1,9 @@
 # -*- coding: UTF-8 -*-
 
-__module_name__        = 'Find mask'
+__module_name__        = 'Find nicks and channels'
 __module_version__     = '1.0'
-__module_description__ = 'Find nicks with same ip or ident, ' \
-                         'visited channels, first and last seen datetime'
+__module_description__ = 'Find nicks with the same IP or ident, ' \
+                         'visited channels, and first and last seen datetime.'
 
 
 import hexchat
@@ -116,7 +116,7 @@ def whois_name_line(word, word_eol, userdata):
         return hexchat.EAT_NONE
 
 
-def nicks_channels(word, word_eol, userdata):
+def search(word, word_eol, userdata):
     global search_queue
     if len(word) == 3:
         try:
@@ -148,7 +148,7 @@ def nicks_channels(word, word_eol, userdata):
 
 hexchat.hook_print('Whois Name Line', whois_name_line)
 
-hexchat.hook_command('nicks_channels', nicks_channels)
+hexchat.hook_command('search', search)
 
 
 Thread(target=search_thread).start()

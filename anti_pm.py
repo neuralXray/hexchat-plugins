@@ -2,7 +2,7 @@
 
 __module_name__        = 'Anti private messages'
 __module_version__     = '1.0'
-__module_description__ = 'Ignore private messages from a nick after he sends you one.'
+__module_description__ = 'Ignore user private messages after the first one.'
 
 
 import hexchat

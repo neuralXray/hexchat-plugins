@@ -2,7 +2,7 @@
 
 __module_name__ = 'Karaoke'
 __module_version__ = '1.0'
-__module_description__ = 'Karaoke'
+__module_description__ = 'Karaoke.'
 
 
 import hexchat
@@ -84,7 +84,9 @@ def send(channel, song_path):
 
 
 hexchat.hook_command('lyrics_path', get_lyrics_path)
+hexchat.hook_command('lp', get_lyrics_path)
 hexchat.hook_command('lyrics', get_lyrics)
+hexchat.hook_command('l', get_lyrics)
 
 
 print(__module_name__, 'loaded')

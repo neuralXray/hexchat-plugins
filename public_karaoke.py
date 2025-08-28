@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-__module_name__ = 'Singer'
+__module_name__ = 'Public Karaoke'
 __module_version__ = '1.0'
-__module_description__ = 'Singer'
+__module_description__ = 'Publicly accessible karaoke.'
 
 
 import hexchat
@@ -108,10 +108,10 @@ def help(channel):
     busy = True
     hexchat.command('msg ' + channel + ' ' + 'Display synchronized song lyrics')
     sleep(2)
-    hexchat.command('msg ' + channel + ' ' + '.get_lyrics_path song to search')
+    hexchat.command('msg ' + channel + ' ' + '.lyrics_path/lp <song to search>')
     sleep(2)
     hexchat.command('msg ' + channel + ' ' + \
-                    '.get_lyrics song path returned by .get_lyrics_path command')
+                    '.lyrics/l <song path returned by previous command>')
     busy = False
 
 
@@ -120,11 +120,11 @@ def message(word, word_eol, userdata):
         message = hexchat.strip(word[1])
         channel = hexchat.get_info('channel')
 
-        if message.startswith('.get_lyrics_path'):
+        if message.startswith('.lyrics_path') or message.startswith('.lp'):
             song_search = message[len('.get_lyrics_path') + 1:]
             Thread(target=get_lyrics_path, args=(channel, song_search,)).start()
 
-        elif message.startswith('.get_lyrics'):
+        elif message.startswith('.lyrics') or message.startswith('.l'):
             song_path = message[len('.get_lyrics') + 1:]
             Thread(target=send, args=(channel, song_path,)).start()
 

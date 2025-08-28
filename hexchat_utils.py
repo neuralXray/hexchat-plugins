@@ -6,6 +6,9 @@ from os import listdir
 from datetime import datetime
 
 
+# Pending: strip or not based on config
+
+
 color = '\003'
 reset = '\017'
 colors = (19, 20, 22, 24, 25, 26, 27, 28, 29)
@@ -84,6 +87,7 @@ def message_word_extractor(word):
     else:
         mode = ''
     msg = hexchat.strip(word[1])
+    #msg = word[1]
 
     nick = colored_nick(nick, mode)
 

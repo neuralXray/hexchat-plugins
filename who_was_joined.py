@@ -2,7 +2,7 @@
 
 __module_name__        = 'WHO was JOINed'
 __module_version__     = '1.0'
-__module_description__ = 'Log who were joined'
+__module_description__ = 'Log who were joined.'
 
 
 import hexchat

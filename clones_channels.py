@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 
-__module_name__        = 'Find clones & channels'
+__module_name__        = 'Find clones and channels'
 __module_version__     = '1.0'
-__module_description__ = 'Find users with same ip & common channels after a whois'
+__module_description__ = 'Find users with the same IP and common channels after a WHOIS.'
 
 
 import hexchat

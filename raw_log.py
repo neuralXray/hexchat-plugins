@@ -2,7 +2,7 @@
 
 __module_name__        = 'Raw logger'
 __module_version__     = '1.0'
-__module_description__ = 'Log raw server events'
+__module_description__ = 'Log raw server events.'
 
 
 import hexchat

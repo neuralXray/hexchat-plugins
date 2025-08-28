@@ -2,7 +2,7 @@
 
 __module_name__        = 'Identify'
 __module_version__     = '1.0'
-__module_description__ = 'Automatically identify with password'
+__module_description__ = 'Automatically identify with password.'
 
 
 import hexchat

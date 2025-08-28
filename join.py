@@ -2,7 +2,7 @@
 
 __module_name__        = 'JOIN'
 __module_version__     = '1.0'
-__module_description__ = 'JOIN to several channels with one command'
+__module_description__ = 'JOIN to several channels with one command.'
 
 
 import hexchat
