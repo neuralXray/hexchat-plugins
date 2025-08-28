@@ -44,21 +44,21 @@ def channel_deop_thread(context, channel, nick):
 
     sleep(op_delay)
     if (time() - clock > op_delay) & (not op_returned):
-        context.command(f'msg CHaN op {channel} {my_nick}')
+        context.command(f'query CHaN op {channel} {my_nick}')
         clock = time()
         op_returned = True
         context.command(f'mode -o {nick}')
 
 
 def chan_command(word, word_eol, userdata):
-    # /msg CHaN command channel target
+    # /query CHaN command channel target
     # hexchat.prnt('CHaN command')
     # hexchat.prnt(', '.join(word))
     channel = hexchat.get_info('channel').lower()
     command = word[0][:-1]
     target = word[1]
 
-    hexchat.command(f'msg CHaN {command} {channel} {target}')
+    hexchat.command(f'query CHaN {command} {channel} {target}')
 
     return hexchat.EAT_ALL
 
@@ -74,7 +74,7 @@ def your_nick_changing(word, word_eol, userdata):
     if key in channels.keys():
         channel = hexchat.get_info('channel').lower()
         if channel in channels[key]:
-            hexchat.command(f'msg CHaN op {channel} {new_nick}')
+            hexchat.command(f'query CHaN op {channel} {new_nick}')
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
@@ -194,7 +194,7 @@ def banned(word, word_eol, userdata):
 
     if key in channels.keys():
         if channel in channels[key]:
-            hexchat.command(f'msg CHaN unban {channel}')
+            hexchat.command(f'query CHaN unban {channel}')
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
@@ -219,7 +219,7 @@ def channel_deop(word, word_eol, userdata):
             for objective in objectives:
                 if objective == my_nick:
                     if time() - clock > op_delay:
-                        hexchat.command(f'msg CHaN op {channel} {my_nick}')
+                        hexchat.command(f'query CHaN op {channel} {my_nick}')
                         clock = time()
                         hexchat.command(f'mode -o {nick}')
                     else:
@@ -301,7 +301,7 @@ def you_kicked(word, word_eol, userdata):
         channel = hexchat.get_info('channel').lower()
         if channel in channels[key]:
             nick = word[2]
-            hexchat.command(f'msg CHaN deop {channel} {nick}')
+            hexchat.command(f'query CHaN deop {channel} {nick}')
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
@@ -513,7 +513,7 @@ def invite(word, word_eol, userdata):
     if key in channels.keys():
         channel = word[0]
         if channel in channels[key]:
-            hexchat.command(f'msg CHaN invite {channel}')
+            hexchat.command(f'query CHaN invite {channel}')
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
