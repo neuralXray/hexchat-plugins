@@ -12,7 +12,8 @@ import hexchat
 import sys
 configdir = hexchat.get_info('configdir')
 sys.path.insert(0, configdir)
-from hexchat_utils import colored_nicks_loaded, user_fields_extractor, message_word_extractor
+from hexchat_utils import colored_nicks_loaded, server_context, \
+                          user_fields_extractor, message_word_extractor
 from utils import user_regex
 
 from re import search, IGNORECASE
@@ -36,6 +37,16 @@ op_returned = False
 op_delay = 2
 
 is_colored_nicks_loaded = colored_nicks_loaded()
+
+
+channel_regex = '#[^ ]*'
+wait_rejoin_regex = 'You must wait [0-9]+ seconds after being kicked to rejoin '\
+                    '\(\+J is set\)'
+
+
+def join_thread(channel, seconds, context):
+    sleep(int(seconds))
+    context.command(f'join {channel}')
 
 
 def channel_deop_thread(context, channel, nick):
@@ -499,6 +510,12 @@ def server_text(word, word_eol, userdata):
         i = user.find('!')
         j = user.find('@')
         my_idents[connection_id] = user[i + 1:j]
+    elif search(f'{channel_regex} :{wait_rejoin_regex}', text):
+        i = text.find(' ')
+        channel = text[:i]
+        seconds = search('[0-9]+', search(wait_rejoin_regex, text).group()).group()
+        context = server_context(connection_id)
+        Thread(target=join_thread, args=(channel, seconds, context,)).start()
 
     return hexchat.EAT_NONE
 
