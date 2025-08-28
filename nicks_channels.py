@@ -60,7 +60,7 @@ def search_thread():
                     printout = printout_nick_history(nick_history, ident_history, col_nick, ident, ip)
                     printout_queue.append(printout)
                 if channel_history:
-                    printout = printout_channel_history(channel_history, col_nick, ident, ip)
+                    printout = printout_channel_history(channel_history, col_nick)
                     printout_queue.append(printout)
                 if first_seen:
                     if first_seen == last_seen:
