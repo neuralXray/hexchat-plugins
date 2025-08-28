@@ -571,9 +571,18 @@ def nick_clash(word, word_eol, userdata):
     # hexchat.prnt('Nick Clash')
     # hexchat.prnt(', '.join(word))
     nick = word[0]
+    new_nick = word[1]
+
     if ':' not in nick:
         nick = colored_nick(nick)
-    new_nick = colored_nick(word[1])
+    i = new_nick.find(':')
+    if i != -1:
+        new_nick = new_nick[:i]
+    else:
+        i = new_nick.find('!')
+        if i != -1:
+            new_nick = new_nick[:i]
+    new_nick = colored_nick(new_nick)
 
     printout = '*\t' + nick + ' is already in use, retrying with ' + new_nick + '...'
 
