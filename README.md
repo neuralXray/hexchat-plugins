@@ -13,7 +13,7 @@ git clone https://github.com/neuralXray/irc-nicks-channels.git
 mv irc-nicks-channels/utils.py .
 rm -rf hexchat-plugins irc-nicks-channels
 mkdir utils
-mv hexchat_utils.py utils.py utils
+mv update.py hexchat_utils.py utils.py utils
 ```
 
 
@@ -148,7 +148,16 @@ Log who were joined.
 
 ### 13. Update
 
-Update nickname, username, and realname with randomized strings only on certain network configurations. Change the HexChat launcher command to: `bash -c 'python3 ~/hexchat-plugins/update.py && hexchat --existing %U'` to update the configuration every time you start HexChat.
+Update nickname, username, and realname with randomized strings only on specified networks and in global configuration. The nickname and username are the same.
+
+* Nickname and realname format: Guest[0-9]{4}
+* Username format: [a-zA-Z][a-zA-Z0-9]{8}
+
+#### Configuration file
+
+Write a comma-separated list of the network names where the configuration will be updated in the file `update.config`.
+
+ Change the HexChat launcher command to `bash -c 'python3 ~/.config/hexchat/addons/utils/update.py && hexchat --existing %U'` to update the configuration every time you start HexChat.
 
 
 ### Support the developer

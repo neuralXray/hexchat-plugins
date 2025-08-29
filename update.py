@@ -2,13 +2,18 @@ from os import getenv
 from random import randint, choice
 
 
-# Pendiente: detectar automáticamente tema sistema light / dark y renombrar archivo colores
+# Pending: rename colors file to update HexChat theme accordingly to system theme
 
 
 user_name = getenv('USER')
 directory = '/home/' + user_name + '/.config/hexchat/'
 servlist_file = directory + 'servlist.conf'
 hexchat_file = directory + 'hexchat.conf'
+
+file = open(directory + '/addons/update.conf')
+lines = file.readlines()
+file.close()
+networks = lines[0].split(',')
 
 mode = 'C=mode'
 irc_nick1 = 'irc_nick1 = '
@@ -41,7 +46,7 @@ with open(servlist_file, 'w') as file:
                     nick = nick + choice(digits)
                 modified_line = line[:2] + nick + '\n'
                 file.write(modified_line)
-                print(chat + ': ' + modified_line)
+                #print(chat + ': ' + modified_line)
                 modify = modify + 1
                 first = False
         elif (modify > 1) & (modify < 5):
@@ -52,7 +57,7 @@ with open(servlist_file, 'w') as file:
             elif line[0] == 'U':
                 name = ''
                 for i in range(ident_length):
-                    # idents que empiezan por un número son erróneos
+                    # idents that start with a number are erroneous
                     if name:
                         name = name + choice(characters)
                     else:
@@ -61,25 +66,19 @@ with open(servlist_file, 'w') as file:
                 name = nick
             modified_line = line[:2] + name + '\n'
             file.write(modified_line)
-            print(chat + ': ' + modified_line)
+            #print(chat + ': ' + modified_line)
             modify = modify + 1
         elif (modify == 5) & ('C=mode' in line) & modify_mod:
             modified_line = mode + ' ' + nick + line[line.rindex(' '):]
             file.write(modified_line)
-            print(chat + ': ' + modified_line)
+            #print(chat + ': ' + modified_line)
             modify_mod = False
         else:
             file.write(line)
 
-        if line.startswith('N=') and \
-           (line.endswith('hidden\n') or line.endswith('Chateamos\n') or line.endswith('ChatZona\n')):
+        if line.startswith('N=') and (line[2:-1] in networks):
             modify_mod = True
             modify = 1
-            chat = line[2:-1]
-            first = True
-        elif line == 'N=Chateamos\n':
-            modify_mod = True
-            modify = 3
             chat = line[2:-1]
             first = True
         elif line == '\n':
@@ -98,39 +97,39 @@ with open(hexchat_file, 'w') as file:
             for i in range(n_length):
                 nick = nick + choice(digits)
             modified_line = irc_nick1 + nick + '\n'
-            print(modified_line)
+            #print(modified_line)
             file.write(modified_line)
         elif line.startswith(irc_nick2):
             name = 'Guest'
             for i in range(n_length):
                 name = name + choice(digits)
             modified_line = irc_nick2 + name + '\n'
-            print(modified_line)
+            #print(modified_line)
             file.write(modified_line)
         elif line.startswith(irc_nick3):
             name = 'Guest'
             for i in range(n_length):
                 name = name + choice(digits)
             modified_line = irc_nick3 + name + '\n'
-            print(modified_line)
+            #print(modified_line)
             file.write(modified_line)
         elif line.startswith(irc_user_name):
             name = ''
             for i in range(ident_length):
-                # idents que empiezan por un número son erróneos
+                # idents that start with a number are erroneous
                 if name:
                     name = name + choice(characters)
                 else:
                     name = choice(characters[10:])
             modified_line = irc_user_name + name + '\n'
-            print(modified_line)
+            #print(modified_line)
             file.write(modified_line)
         elif line.startswith(irc_real_name):
             modified_line = irc_real_name + nick + '\n'
-            print(modified_line)
+            #print(modified_line)
             file.write(modified_line)
         else:
             file.write(line)
 
-print('Done!')
+#print('Done!')
 
