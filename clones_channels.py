@@ -8,7 +8,7 @@ __module_description__ = 'Find users with the same IP and common channels after 
 import hexchat
 
 import sys
-sys.path.insert(0, hexchat.get_info('configdir'))
+sys.path.insert(0, hexchat.get_info('configdir') + '/addons/utils')
 from hexchat_utils import colored_nick, server_context, colored_nicks_loaded
 
 

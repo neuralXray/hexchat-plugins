@@ -8,8 +8,7 @@ __module_description__ = 'Publicly accessible karaoke.'
 import hexchat
 
 import sys
-configdir = hexchat.get_info('configdir')
-sys.path.insert(0, configdir)
+sys.path.insert(0, hexchat.get_info('configdir') + '/addons/utils')
 from hexchat_utils import colored_nicks_loaded
 
 from threading import Thread

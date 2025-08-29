@@ -8,14 +8,14 @@ __module_description__ = 'Notice nick mentions and private messages if marked as
 import hexchat
 
 import sys
-configdir = hexchat.get_info('configdir')
-sys.path.insert(0, configdir)
+addonsdir = hexchat.get_info('configdir') + '/addons'
+sys.path.insert(0, addonsdir + '/utils')
 from hexchat_utils import colored_nicks_loaded
 
 from re import search, IGNORECASE
 
 
-file = open(configdir + '/addons/away.conf')
+file = open(addonsdir + '/away.conf')
 lines = file.readlines()
 file.close()
 

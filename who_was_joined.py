@@ -11,7 +11,7 @@ from threading import Thread
 from time import sleep
 
 import sys
-sys.path.insert(0, hexchat.get_info('configdir'))
+sys.path.insert(0, hexchat.get_info('configdir') + '/addons/utils')
 from hexchat_utils import colored_nicks_loaded, channel_context, logging
 
 

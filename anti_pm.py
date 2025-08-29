@@ -8,12 +8,12 @@ __module_description__ = 'Ignore user private messages after the first one.'
 import hexchat
 
 import sys
-configdir = hexchat.get_info('configdir')
-sys.path.insert(0, configdir)
+addonsdir = hexchat.get_info('configdir') + '/addons'
+sys.path.insert(0, addonsdir + '/utils')
 from hexchat_utils import colored_nicks_loaded
 
 
-file = open(configdir + '/addons/anti_pm.conf')
+file = open(addonsdir + '/anti_pm.conf')
 lines = file.readlines()
 file.close()
 

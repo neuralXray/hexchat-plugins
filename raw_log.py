@@ -10,8 +10,7 @@ import hexchat
 from os.path import exists
 
 
-configdir = hexchat.get_info('configdir')
-log_dir = configdir + '/logs/raw.log'
+log_dir = hexchat.get_info('configdir') + '/logs/raw.log'
 
 if not exists(log_dir):
     file = open(log_dir, 'w')

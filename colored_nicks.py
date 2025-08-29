@@ -8,8 +8,7 @@ __module_description__ = 'Colorize nicks in all text events.'
 import hexchat
 
 import sys
-configdir = hexchat.get_info('configdir')
-sys.path.insert(0, configdir)
+sys.path.insert(0, hexchat.get_info('configdir') + '/addons/utils')
 from hexchat_utils import logging, colored_nick, user_fields_extractor, my_nick_host, \
                           message_word_extractor, channel_word_extractor, \
                           outer_word_extractor, inner_word_extractor, \

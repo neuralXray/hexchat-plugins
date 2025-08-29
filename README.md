@@ -6,9 +6,14 @@ A collection of HexChat plugins written in Python.
 ## Installation commands
 
 ```
-mkdir hexchat-plugins
-cd hexchat-plugins
+cd ~/.config/hexchat/addons
 git clone https://github.com/neuralXray/hexchat-plugins.git
+mv hexchat-plugins/* .
+git clone https://github.com/neuralXray/irc-nicks-channels.git
+mv irc-nicks-channels/utils.py .
+rm -rf hexchat-plugins irc-nicks-channels
+mkdir utils
+mv hexchat_utils.py utils.py utils
 ```
 
 
