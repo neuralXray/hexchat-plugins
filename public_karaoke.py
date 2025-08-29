@@ -29,6 +29,7 @@ minutes_regex = '^\[[0-9]{2}\:'
 seconds_regex = ':[0-9]{2}\.[0-9]{2,3}\]'
 start_regex = minutes_regex + seconds_regex[1:]
 
+is_on = False
 busy = False
 
 is_colored_nicks_loaded = colored_nicks_loaded()
@@ -115,7 +116,7 @@ def help(channel):
 
 
 def message(word, word_eol, userdata):
-    if not busy:
+    if is_on and (not busy):
         message = hexchat.strip(word[1])
         channel = hexchat.get_info('channel')
 
@@ -136,10 +137,24 @@ def message(word, word_eol, userdata):
         return hexchat.EAT_NONE
 
 
+def turn_on_off(word, word_eol, userdata):
+    global is_on
+    turn = word[1]
+    if turn == 'on':
+        is_on = True
+    elif turn == 'off':
+        is_on = False
+
+    return hexchat.EAT_ALL
+
+
 hexchat.hook_print('Channel Message', message)
 hexchat.hook_print('Channel Msg Hilight', message)
 hexchat.hook_print('Channel Action', message)
 hexchat.hook_print('Channel Action Hilight', message)
+
+hexchat.hook_command('public_karaoke', turn_on_off)
+hexchat.hook_command('pk', turn_on_off)
 
 
 print(__module_name__, 'loaded')
