@@ -10,7 +10,7 @@ import hexchat
 
 import sys
 configdir = hexchat.get_info('configdir')
-sys.path.insert(0, configdir)
+sys.path.insert(0, configdir + '/addons/utils')
 from hexchat_utils import colored_nick, server_context, colored_nicks_loaded, printout_nick_history
 from utils import find_nicks, printout_channel_history, \
                   printout_first_seen, printout_last_seen, printout_first_and_last_seen

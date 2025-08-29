@@ -4,14 +4,14 @@ __module_name__        = 'CHaN'
 __module_version__     = '1.0'
 __module_description__ = 'Automated and hidden channel operator actions.'
 
-# Pendiente: pillar exempts a akicks para eliminarlas automaticamente
+# Pending: get akick exempts to automatically delete them
 
 
 import hexchat
 
 import sys
-configdir = hexchat.get_info('configdir')
-sys.path.insert(0, configdir)
+addonsdir = hexchat.get_info('configdir') + '/addons'
+sys.path.insert(0, addonsdir + '/utils')
 from hexchat_utils import colored_nicks_loaded, server_context, \
                           user_fields_extractor, message_word_extractor
 from utils import user_regex
@@ -21,7 +21,7 @@ from time import time, sleep
 from threading import Thread
 
 
-file = open(configdir + '/addons/chan.conf')
+file = open(addonsdir + '/chan.conf')
 lines = file.readlines()
 file.close()
 channels = {}
@@ -235,7 +235,8 @@ def channel_deop(word, word_eol, userdata):
                         hexchat.command(f'mode -o {nick}')
                     else:
                         op_returned = False
-                        Thread(target=channel_deop_thread, args=(hexchat.get_context(), channel, nick,)).start()
+                        Thread(target=channel_deop_thread,
+                               args=(hexchat.get_context(), channel, nick,)).start()
                     break
 
     if is_colored_nicks_loaded:
@@ -268,7 +269,8 @@ def channel_ban(word, word_eol, userdata):
     # hexchat.prnt('Channel Ban')
     # hexchat.prnt(', '.join(word))
     objective = word[1]
-    if (':' not in objective) and ('(' not in objective) and (')' not in objective) and ('+' not in objective):
+    if (':' not in objective) and ('(' not in objective) and (')' not in objective) and \
+       ('+' not in objective):
         entity = word[0]
         my_nick = hexchat.get_info('nick')
         for user in hexchat.get_list('users'):
@@ -284,14 +286,16 @@ def channel_ban(word, word_eol, userdata):
                     else:
                         my_ip = '*'
                     my_user = my_nick + '!' + my_ident + '@' + my_ip
-                    objective_regex = objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
-                                               .replace('*', '.*').replace('[', '\[').replace('|', '\|')
+                    objective_regex = objective.replace('\\', '\\\\').replace('.', '\.')\
+                                               .replace('?', '.').replace('*', '.*')\
+                                               .replace('[', '\[').replace('|', '\|')
 
                     if search(objective_regex, my_user):
                         if '.' in entity:
                             hexchat.command(f'mode -b+e {objective} {objective}')
                         else:
-                            hexchat.command(f'mode -b+e-o+b {objective} {objective} {entity} {entity}')
+                            hexchat.command(f'mode -b+e-o+b {objective} {objective} '\
+                                            f'{entity} {entity}')
                 break
 
     if is_colored_nicks_loaded:
