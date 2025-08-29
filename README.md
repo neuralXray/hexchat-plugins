@@ -124,7 +124,7 @@ Karaoke.
 
 ### 9. Public karaoke
 
-Publicly accessible karaoke. The commands are the same as those for the karaoke plugin, but are received from other users' channel messages when preceded by a dot.
+Publicly accessible karaoke. The commands are the same as those for the karaoke plugin, but are received from other users' channel messages when preceded by a dot. To enable the control of the karaoke via channel messages, execute `public_karaoke/pk on`. To disable it, execute `public_karaoke/pk off`. By default, it's disabled.
 
 
 ### 10. Find nicks and channels
