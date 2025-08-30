@@ -148,10 +148,13 @@ Log who were joined.
 
 ### 13. Update
 
-Update nickname, username, and realname with randomized strings only on specified networks and in global configuration. The nickname and username are the same.
+Features:
 
-* Nickname and realname format: Guest[0-9]{4}
-* Username format: [a-zA-Z][a-zA-Z0-9]{8}
+* Rename the colors file to update the HexChat theme according to the system theme.
+
+* Update nickname, username, and realname with randomized strings only on specified networks and in global configuration. The nickname and username are the same.
+    * Nickname and realname format: Guest[0-9]{4}
+    * Username format: [a-zA-Z][a-zA-Z0-9]{8}
 
 #### Configuration file
 

@@ -1,12 +1,25 @@
 from os import getenv
 from random import randint, choice
+from subprocess import check_output
+from shutil import copy
 
 
-# Pending: rename colors file to update HexChat theme accordingly to system theme
+def theme_is_dark():
+    theme = check_output(["xfconf-query", "-c", "xsettings", "-p", "/Net/ThemeName"])\
+            .decode("utf-8").strip().lower()
+    return 'dark' in theme
 
 
 user_name = getenv('USER')
 directory = '/home/' + user_name + '/.config/hexchat/'
+
+
+if theme_is_dark():
+    copy(f'{directory}addons/colors_dark.conf', f'{directory}colors.conf')
+else:
+    copy(f'{directory}addons/colors_light.conf', f'{directory}colors.conf')
+
+
 servlist_file = directory + 'servlist.conf'
 hexchat_file = directory + 'hexchat.conf'
 
