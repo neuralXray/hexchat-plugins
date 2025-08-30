@@ -4,8 +4,6 @@ __module_name__        = 'CHaN'
 __module_version__     = '1.0'
 __module_description__ = 'Automated and hidden channel operator actions.'
 
-# Pending: get akick exempts to automatically delete them
-
 
 import hexchat
 
@@ -466,6 +464,34 @@ def channel_unban(word, word_eol, userdata):
         return hexchat.EAT_NONE
 
 
+
+def channel_exempt(word, word_eol, userdata):
+    # /MODE #channel e objective
+    # hexchat.prnt('Channel Exempt')
+    # hexchat.prnt(', '.join(word))
+    entity = word[0]
+    my_nick = hexchat.get_info('nick')
+
+    if entity != my_nick:
+        connection_id = hexchat.get_prefs('id')
+        channel = hexchat.get_info('channel').lower()
+        key = (connection_id, channel)
+
+        if key in akick.keys():
+            objective = word[1]
+            objective_regex = objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
+                                       .replace('*', '.*').replace('[', '\[').replace('|', '\|')
+
+            if any([bool(search(objective_regex, ak)) for ak in akick[key]]) or \
+               any([bool(search(ak, objective)) for ak in akick[key]]):
+                hexchat.command(f'mode -e {objective}')
+
+    if is_colored_nicks_loaded:
+        return hexchat.EAT_HEXCHAT
+    else:
+        return hexchat.EAT_NONE
+
+
 def channel_remove_exempt(word, word_eol, userdata):
     # /MODE #channel -e objective
     # hexchat.prnt('Channel Remove Exempt')
@@ -587,6 +613,7 @@ hexchat.hook_command('rmakick', rmakick_command)
 hexchat.hook_command('listakick', listakick_command)
 hexchat.hook_print('Join', join)
 hexchat.hook_print('Channel UnBan', channel_unban)
+hexchat.hook_print('Channel Exempt', channel_exempt)
 hexchat.hook_print('Channel Remove Exempt', channel_remove_exempt)
 
 hexchat.hook_print('Invite', invite)
