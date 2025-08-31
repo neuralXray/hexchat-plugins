@@ -33,7 +33,7 @@ italics = '\035'
 hide_joins_parts = 1 << 6
 hide_joins_parts_unset = 1 << 7
 
-hilighted_windows = []
+highlighted_windows = []
 focused_tab = (0, '')
 
 
@@ -122,7 +122,7 @@ def channel_message(word, word_eol, userdata):
         hexchat.prnt(printout)
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        if (connection_id, channel) not in hilighted_windows:
+        if (connection_id, channel) not in highlighted_windows:
             hexchat.command('GUI COLOR 2')
 
     return hexchat.EAT_HEXCHAT
@@ -145,7 +145,7 @@ def private_message_to_dialog(word, word_eol, userdata):
 def channel_message_highlight(word, word_eol, userdata):
     # hexchat.prnt('Channel Msg Hilight')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, msg = message_word_extractor(word)
 
     msg = bold + color + highlight_color + msg
@@ -161,9 +161,9 @@ def channel_message_highlight(word, word_eol, userdata):
     hexchat.command('GUI COLOR 3')
     connection_id = hexchat.get_prefs('id')
     channel = hexchat.get_info('channel')
-    hilighted_window = (connection_id, channel)
-    if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-        hilighted_windows.append(hilighted_window)
+    highlighted_window = (connection_id, channel)
+    if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+        highlighted_windows.append(highlighted_window)
 
     if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
         hexchat.command('SPLAY ' + sound_file)
@@ -249,7 +249,7 @@ def channel_action(word, word_eol, userdata):
         hexchat.prnt(printout)
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        if (connection_id, channel) not in hilighted_windows:
+        if (connection_id, channel) not in highlighted_windows:
             hexchat.command('GUI COLOR 2')
 
     return hexchat.EAT_HEXCHAT
@@ -275,7 +275,7 @@ def private_action_to_dialog(word, word_eol, userdata):
 def channel_action_highlight(word, word_eol, userdata):
     # hexchat.prnt('Channel Action Hilight')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, msg = message_word_extractor(word)
 
     nick = italics + nick
@@ -292,9 +292,9 @@ def channel_action_highlight(word, word_eol, userdata):
     hexchat.command('GUI COLOR 3')
     connection_id = hexchat.get_prefs('id')
     channel = hexchat.get_info('channel')
-    hilighted_window = (connection_id, channel)
-    if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-        hilighted_windows.append(hilighted_window)
+    highlighted_window = (connection_id, channel)
+    if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+        highlighted_windows.append(highlighted_window)
 
     if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
         hexchat.command('SPLAY ' + sound_file)
@@ -348,7 +348,7 @@ def notice_send(word, word_eol, userdata):
 def channel_notice(word, word_eol, userdata):
     # hexchat.prnt('Channel Notice')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     channel = word[1]
     msg = hexchat.strip(word[2])
@@ -358,9 +358,9 @@ def channel_notice(word, word_eol, userdata):
 
     hexchat.command('GUI COLOR 3')
     connection_id = hexchat.get_prefs('id')
-    hilighted_window = (connection_id, channel)
-    if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-        hilighted_windows.append(hilighted_window)
+    highlighted_window = (connection_id, channel)
+    if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+        highlighted_windows.append(highlighted_window)
 
     if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
         hexchat.command('SPLAY ' + sound_file)
@@ -500,7 +500,7 @@ def channel_mode_generic(word, word_eol, userdata):
     # /MODE objective [+]/-mode[[+]/-mode]
     # hexchat.prnt('Channel Mode Generic')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     entity = word[0]
     if '.' not in entity:
         entity = colored_nick(entity)
@@ -530,9 +530,9 @@ def channel_mode_generic(word, word_eol, userdata):
             i = channel.find(' ')
             if i != -1:
                 channel = channel[:i]
-            hilighted_window = (connection_id, channel)
-            if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-                hilighted_windows.append(hilighted_window)
+            highlighted_window = (connection_id, channel)
+            if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+                highlighted_windows.append(highlighted_window)
             if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
                 hexchat.command('SPLAY ' + sound_file)
     else:
@@ -943,7 +943,7 @@ def channel_voice(word, word_eol, userdata):
     # /VOICE objective
     # hexchat.prnt('Channel Voice')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, objective = channel_word_extractor(word)
 
     printout = '*\t' + nick + ' gives voice to ' + objective
@@ -953,9 +953,9 @@ def channel_voice(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -965,7 +965,7 @@ def channel_de_voice(word, word_eol, userdata):
     # /DEVOICE objective
     # hexchat.prnt('Channel DeVoice')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, objective = channel_word_extractor(word)
 
     printout = '*\t' + nick + ' removes voice from ' + objective
@@ -975,9 +975,9 @@ def channel_de_voice(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -987,7 +987,7 @@ def channel_operator(word, word_eol, userdata):
     # /OP objective
     # hexchat.prnt('Channel Operator')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, objective = channel_word_extractor(word)
 
     printout = '*\t' + nick + ' gives channel operator status to ' + objective
@@ -997,9 +997,9 @@ def channel_operator(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1009,7 +1009,7 @@ def channel_de_op(word, word_eol, userdata):
     # /DEOP objective
     # hexchat.prnt('Channel DeOp')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, objective = channel_word_extractor(word)
 
     printout = '*\t' + nick + ' removes channel operator status from ' + objective
@@ -1019,9 +1019,9 @@ def channel_de_op(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1031,7 +1031,7 @@ def channel_half_operator(word, word_eol, userdata):
     # /HOP objective
     # hexchat.prnt('Channel Half-Operator')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, objective = channel_word_extractor(word)
 
     printout = '*\t' + nick + ' gives channel half-operator status to ' + objective
@@ -1041,9 +1041,9 @@ def channel_half_operator(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1053,7 +1053,7 @@ def channel_de_half_op(word, word_eol, userdata):
     # /DEHOP objective
     # hexchat.prnt('Channel DeHalfOp')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick, objective = channel_word_extractor(word)
 
     printout = '*\t' + nick + ' removes channel half-operator status from ' + objective
@@ -1063,9 +1063,9 @@ def channel_de_half_op(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1121,7 +1121,7 @@ def channel_invite(word, word_eol, userdata):
     # /MODE #channel I recipient
     # hexchat.prnt('Channel INVITE')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     recipient = word[1]
     recipient_nick, recipient_username, recipient_host = user_fields_extractor(recipient)
@@ -1136,9 +1136,9 @@ def channel_invite(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1148,7 +1148,7 @@ def channel_remove_invite(word, word_eol, userdata):
     # /MODE #channel -I recipient
     # hexchat.prnt('Channel Remove Invite')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     recipient = word[1]
     recipient_nick, recipient_username, recipient_host = user_fields_extractor(recipient)
@@ -1163,9 +1163,9 @@ def channel_remove_invite(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1225,7 +1225,7 @@ def channel_quiet(word, word_eol, userdata):
     # /QUIET user
     # hexchat.prnt('Channel Quiet')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     objective = word[1]
     objective_nick, objective_username, objective_host = user_fields_extractor(objective)
@@ -1244,9 +1244,9 @@ def channel_quiet(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1256,7 +1256,7 @@ def channel_unquiet(word, word_eol, userdata):
     # /QUIET user
     # hexchat.prnt('Channel UnQuiet')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     objective = word[1]
     objective_nick, objective_username, objective_host = user_fields_extractor(objective)
@@ -1275,9 +1275,9 @@ def channel_unquiet(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1287,7 +1287,7 @@ def channel_ban(word, word_eol, userdata):
     # /BAN objective
     # hexchat.prnt('Channel Ban')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     entity = word[0]
     objective = word[1]
 
@@ -1320,9 +1320,9 @@ def channel_ban(word, word_eol, userdata):
             hexchat.command('GUI COLOR 3')
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
-            hilighted_window = (connection_id, channel)
-            if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-                hilighted_windows.append(hilighted_window)
+            highlighted_window = (connection_id, channel)
+            if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+                highlighted_windows.append(highlighted_window)
             if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
                 hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1332,7 +1332,7 @@ def channel_unban(word, word_eol, userdata):
     # /UNBAN objective
     # hexchat.prnt('Channel UnBan')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     entity = word[0]
     objective = word[1]
 
@@ -1367,9 +1367,9 @@ def channel_unban(word, word_eol, userdata):
             hexchat.command('GUI COLOR 3')
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
-            hilighted_window = (connection_id, channel)
-            if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-                hilighted_windows.append(hilighted_window)
+            highlighted_window = (connection_id, channel)
+            if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+                highlighted_windows.append(highlighted_window)
             if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
                 hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1409,7 +1409,7 @@ def ban_list(word, word_eol, userdata):
 def you_kicked(word, word_eol, userdata):
     # hexchat.prnt('You Kicked')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     kicker = word[2]
     if '.' in kicker:
@@ -1431,9 +1431,9 @@ def you_kicked(word, word_eol, userdata):
     hexchat.command('GUI COLOR 3')
     connection_id = hexchat.get_prefs('id')
     channel = hexchat.get_info('channel')
-    hilighted_window = (connection_id, channel)
-    if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-        hilighted_windows.append(hilighted_window)
+    highlighted_window = (connection_id, channel)
+    if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+        highlighted_windows.append(highlighted_window)
     if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
         hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1468,7 +1468,7 @@ def channel_exempt(word, word_eol, userdata):
     # /MODE #channel e objective
     # hexchat.prnt('Channel Exempt')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     objective = word[1]
     objective_nick, objective_username, objective_host = user_fields_extractor(objective)
@@ -1483,9 +1483,9 @@ def channel_exempt(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -1495,7 +1495,7 @@ def channel_remove_exempt(word, word_eol, userdata):
     # /MODE #channel -e objective
     # hexchat.prnt('Channel Remove Exempt')
     # hexchat.prnt(', '.join(word))
-    global hilighted_windows
+    global highlighted_windows
     nick = colored_nick(word[0])
     objective = word[1]
     objective_nick, objective_username, objective_host = user_fields_extractor(objective)
@@ -1510,9 +1510,9 @@ def channel_remove_exempt(word, word_eol, userdata):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
-        hilighted_window = (connection_id, channel)
-        if (hilighted_window not in hilighted_windows) & (hilighted_window != focused_tab):
-            hilighted_windows.append(hilighted_window)
+        highlighted_window = (connection_id, channel)
+        if (highlighted_window not in highlighted_windows) & (highlighted_window != focused_tab):
+            highlighted_windows.append(highlighted_window)
         if (hexchat.get_info('away') is None) | (hexchat.get_prefs('away_omit_alerts') == 0):
             hexchat.command('SPLAY ' + sound_file)
     return hexchat.EAT_HEXCHAT
@@ -2007,13 +2007,13 @@ def dcc_timeout(word, word_eol, userdata):
 
 
 def focus_tab(word, word_eol, userdata):
-    global hilighted_windows, focused_tab
+    global highlighted_windows, focused_tab
     connection_id = hexchat.get_prefs('id')
     channel = hexchat.get_info('channel')
     focused_tab = (connection_id, channel)
 
-    if focused_tab in hilighted_windows:
-        hilighted_windows.remove(focused_tab)
+    if focused_tab in highlighted_windows:
+        highlighted_windows.remove(focused_tab)
 
     return hexchat.EAT_NONE
 
