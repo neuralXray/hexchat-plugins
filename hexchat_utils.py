@@ -43,8 +43,8 @@ def user_fields_extractor(user):
     i = user.find('!')
     j = user.find('@')
 
-    if (i == -1) & (j == -1):
-        if ('*' not in user) & ('.' not in user):
+    if (i == -1) and (j == -1):
+        if ('*' not in user) and ('.' not in user):
             nick = colored_nick(user)
         else:
             nick = user
@@ -52,7 +52,7 @@ def user_fields_extractor(user):
         host = ''
     else:
         nick = user[:i]
-        if ('*' not in nick) & ('.' not in nick):
+        if ('*' not in nick) and ('.' not in nick):
             nick = colored_nick(nick)
         username = user[i + 1:j]
         host = hexchat.strip(user[j + 1:])
@@ -169,8 +169,12 @@ def printout_nick_history(nick_history, ident_history, nick='', ident='', ip='')
        (len(nick_history) > 1):
         nick_history[-1] = f'{nick_history[-1]} ! {list_ident_history[0]}'
     else:
-        nick_history = [f'{n}!{ident_history[hexchat.strip(n)][0]}'
-                        if (hexchat.strip(n) in ident_history.keys()) and len(ident_history[hexchat.strip(n)]) == 1 else
+        nick_history = [n if (hexchat.strip(n) in ident_history.keys()) and \
+                             (len(ident_history[hexchat.strip(n)]) == 1) and \
+                             (ident_history[hexchat.strip(n)][0] == '*') else
+                        f'{n}!{ident_history[hexchat.strip(n)][0]}'
+                        if (hexchat.strip(n) in ident_history.keys()) and \
+                           (len(ident_history[hexchat.strip(n)]) == 1) else
                         f'{n}!{",".join([ident for ident in ident_history[hexchat.strip(n)] if ident != "*"])}'
                         if hexchat.strip(n) in ident_history.keys() else
                         n for n in nick_history]
