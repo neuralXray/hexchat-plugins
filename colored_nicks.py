@@ -1299,11 +1299,15 @@ def channel_ban(word, word_eol, userdata):
 
     if ':' not in objective:
         objective_nick, objective_username, objective_host = user_fields_extractor(objective)
-        if '*' in objective_nick:
-            objective = objective_nick + '!' + objective_username + '@' + objective_host
+        if bool(objective_username) and bool(objective_host):
+            if '*' in objective_nick:
+                objective = objective_nick + '!' + objective_username + '@' + objective_host
+            else:
+                objective = reset + objective_nick + color + ban_color + '!' + objective_username + \
+                            '@' + objective_host
         else:
-            objective = reset + objective_nick + color + ban_color + '!' + objective_username + \
-                        '@' + objective_host
+            objective = objective_nick
+        
 
     if '.' in entity:
         printout = '*\t' + color + ban_color + entity + f' sets {mode} on ' + objective
@@ -1344,11 +1348,14 @@ def channel_unban(word, word_eol, userdata):
 
     if ':' not in objective:
         objective_nick, objective_username, objective_host = user_fields_extractor(objective)
-        if '*' in objective_nick:
-            colored_objective = objective_nick + '!' + objective_username + '@' + objective_host
+        if bool(objective_username) and bool(objective_host):
+            if '*' in objective_nick:
+                colored_objective = objective_nick + '!' + objective_username + '@' + objective_host
+            else:
+                colored_objective = reset + objective_nick + color + unban_color + '!' + \
+                                    objective_username + '@' + objective_host
         else:
-            colored_objective = reset + objective_nick + color + unban_color + '!' + \
-                                objective_username + '@' + objective_host
+            colored_objective = objective_nick
     else:
         colored_objective = objective
 
