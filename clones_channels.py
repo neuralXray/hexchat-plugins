@@ -5,6 +5,7 @@ __module_version__     = '1.0'
 __module_description__ = 'Find users with the same IP and common channels after a WHOIS.'
 
 
+from re import search
 import hexchat
 
 import sys
@@ -35,8 +36,14 @@ def whois_name_line(word, word_eol, userdata):
         col_nick = nick
 
     if ip.endswith('.79j.0Ar7OI.virtual') and (chat == 'irc.chathispano.com'):
-        printout = '*\t[' + col_nick + '] Unable to find clone(s) (IRCCloud)'
+        if search('^(u|s)id[0-9]+$', ident):
+            match_case = 1
+        else:
+            match_case = 0
     else:
+        match_case = 2
+
+    if match_case:
         for chan in hexchat.get_list('channels'):
             if (chan.id == connection_id) and (chan.type == 2):
                 user_list = chan.context.get_list('users')
@@ -51,7 +58,11 @@ def whois_name_line(word, word_eol, userdata):
                     if nick_host:
                         nick_ident = nick_host[:nick_host.find('@')]
                         nick_ip = nick_host[nick_host.find('@') + 1:]
-                        if (nick_ip == ip) and (nick_check != nick) and (nick_check not in clones_nicks):
+                        if match_case == 1:
+                            match = (nick_ip == ip) and (nick_ident == ident)
+                        else:
+                            match = nick_ip == ip
+                        if match and (nick_check != nick) and (nick_check not in clones_nicks):
                             clones_nicks.append(nick_check)
                             if is_colored_nicks_loaded:
                                 nick_check = colored_nick(nick_check)
@@ -59,6 +70,8 @@ def whois_name_line(word, word_eol, userdata):
         printout = '*\t[' + col_nick + '] ' + str(len(clones)) + ' clone(s)'
         if clones:
             printout = printout + ': ' + ', '.join(clones)
+    else:
+        printout = f'*\t[{col_nick}] Unable to find clone(s) (IRCCloud with generic ident)'
     if is_colored_nicks_loaded:
         context = server_context(connection_id)
         context.prnt(printout)
