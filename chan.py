@@ -30,8 +30,8 @@ my_idents = {}
 my_ips = {}
 akick = {}
 bans = {}
-clock = time()
-op_returned = False
+clock = {}
+op_returned = {}
 op_delay = 2
 
 is_colored_nicks_loaded = colored_nicks_loaded()
@@ -52,10 +52,9 @@ def channel_deop_thread(context, channel, nick):
     my_nick = hexchat.get_info('nick')
 
     sleep(op_delay)
-    if (time() - clock > op_delay) & (not op_returned):
+    if (time() - clock[channel] > op_delay) & (not op_returned[channel]):
+        clock[channel] = time()
         context.command(f'msg CHaN op {channel} {my_nick}')
-        clock = time()
-        op_returned = True
         context.command(f'mode -o {nick}')
 
 
@@ -227,12 +226,13 @@ def channel_deop(word, word_eol, userdata):
             objectives = word[1].split(' ')
             for objective in objectives:
                 if objective == my_nick:
-                    if time() - clock > op_delay:
+                    op_returned[channel] = False
+                    if (channel not in clock.keys()) or \
+                       (time() - clock[channel] > op_delay):
+                        clock[channel] = time()
                         hexchat.command(f'msg CHaN op {channel} {my_nick}')
-                        clock = time()
                         hexchat.command(f'mode -o {nick}')
                     else:
-                        op_returned = False
                         Thread(target=channel_deop_thread,
                                args=(hexchat.get_context(), channel, nick,)).start()
                     break
@@ -250,10 +250,12 @@ def channel_op(word, word_eol, userdata):
     global op_returned
     nick = word[0]
     objectives = word[1].split(' ')
+    channel = hexchat.get_info('channel').lower()
 
     for objective in objectives:
-        if objective == my_nick:
-            op_returned = True
+        if (objective == my_nick) and (channel in op_returned.keys()) and \
+           (not op_returned[channel]):
+            op_returned[channel] = True
             break
 
     if is_colored_nicks_loaded:
