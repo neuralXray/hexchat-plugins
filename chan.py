@@ -219,27 +219,26 @@ def channel_deop(word, word_eol, userdata):
     # hexchat.prnt('Channel DeOp')
     # hexchat.prnt(', '.join(word))
     global clock, op_returned
+    nick = word[0]
     chat = hexchat.get_info('host')
     my_nick = hexchat.get_info('nick')
     key = (chat, my_nick.lower())
 
-    if key in channels.keys():
-        channel = hexchat.get_info('channel').lower()
-        if channel in channels[key]:
-            nick = word[0]
-            objectives = word[1].split(' ')
-            for objective in objectives:
-                if objective == my_nick:
-                    op_returned[channel] = False
-                    if (channel not in clock.keys()) or \
-                       (time() - clock[channel] > op_delay):
-                        clock[channel] = time()
-                        hexchat.command(f'msg CHaN op {channel} {my_nick}')
-                        hexchat.command(f'mode -o {nick}')
-                    else:
-                        Thread(target=channel_deop_thread,
-                               args=(hexchat.get_context(), channel, nick,)).start()
-                    break
+    if nick != my_nick:
+        if key in channels.keys():
+            channel = hexchat.get_info('channel').lower()
+            if channel in channels[key]:
+                objectives = word[1].split(' ')
+                for objective in objectives:
+                    if objective == my_nick:
+                        op_returned[channel] = False
+                        if time() - clock > op_delay:
+                            hexchat.command(f'msg CHaN op {channel} {my_nick}')
+                            clock = time()
+                        else:
+                            Thread(target=channel_deop_thread,
+                                   args=(hexchat.get_context(), channel, nick,)).start()
+                        break
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
