@@ -271,35 +271,36 @@ def channel_ban(word, word_eol, userdata):
     # /BAN objective
     # hexchat.prnt('Channel Ban')
     # hexchat.prnt(', '.join(word))
+    entity = word[0]
     objective = word[1]
-    if (':' not in objective) and ('(' not in objective) and (')' not in objective) and \
-       ('+' not in objective):
-        entity = word[0]
-        my_nick = hexchat.get_info('nick')
-        for user in hexchat.get_list('users'):
-            if user.nick == my_nick:
-                if user.prefix == '@':
-                    connection_id = hexchat.get_prefs('id')
-                    if connection_id in my_idents:
-                        my_ident = my_idents[connection_id]
-                    else:
-                        my_ident = '*'
-                    if connection_id in my_ips:
-                        my_ip = my_ips[connection_id]
-                    else:
-                        my_ip = '*'
-                    my_user = my_nick + '!' + my_ident + '@' + my_ip
-                    objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.')\
-                                               .replace('?', '.').replace('*', '.*')\
-                                               .replace('[', r'\[').replace('|', r'\|')
-
-                    if search(objective_regex, my_user):
-                        if '.' in entity:
-                            hexchat.command(f'mode -b+e {objective} {objective}')
+    my_nick = hexchat.get_info('nick')
+    if entity != my_nick:
+        if (':' not in objective) and ('(' not in objective) and (')' not in objective) and \
+           ('+' not in objective):
+            for user in hexchat.get_list('users'):
+                if user.nick == my_nick:
+                    if user.prefix == '@':
+                        connection_id = hexchat.get_prefs('id')
+                        if connection_id in my_idents:
+                            my_ident = my_idents[connection_id]
                         else:
-                            hexchat.command(f'mode -b+e-o+b {objective} {objective} '\
-                                            f'{entity} {entity}')
-                break
+                            my_ident = '*'
+                        if connection_id in my_ips:
+                            my_ip = my_ips[connection_id]
+                        else:
+                            my_ip = '*'
+                        my_user = my_nick + '!' + my_ident + '@' + my_ip
+                        objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.')\
+                                                   .replace('?', '.').replace('*', '.*')\
+                                                   .replace('[', r'\[').replace('|', r'\|')
+
+                        if search(objective_regex, my_user):
+                            if '.' in entity:
+                                hexchat.command(f'mode -b+e {objective} {objective}')
+                            else:
+                                hexchat.command(f'mode -b+e-o+b {objective} {objective} '\
+                                                f'{entity} {entity}')
+                    break
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
@@ -505,29 +506,31 @@ def channel_remove_exempt(word, word_eol, userdata):
     # /MODE #channel -e objective
     # hexchat.prnt('Channel Remove Exempt')
     # hexchat.prnt(', '.join(word))
+    entity = word[0]
     objective = word[1]
-    if ('(' not in objective) and (')' not in objective) and ('+' not in objective):
-        my_nick = hexchat.get_info('nick')
-        connection_id = hexchat.get_prefs('id')
+    my_nick = hexchat.get_info('nick')
+    if entity != my_nick:
+        if ('(' not in objective) and (')' not in objective) and ('+' not in objective):
+            connection_id = hexchat.get_prefs('id')
 
-        if connection_id in my_idents:
-            my_ident = my_idents[connection_id]
-        else:
-            my_ident = '*'
-        if connection_id in my_ips:
-            my_ip = my_ips[connection_id]
-        else:
-            my_ip = '*'
-        my_user = my_nick + '!' + my_ident + '@' + my_ip
-        objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
-                                   .replace('*', '.*').replace('[', r'\[').replace('|', r'\|')
+            if connection_id in my_idents:
+                my_ident = my_idents[connection_id]
+            else:
+                my_ident = '*'
+            if connection_id in my_ips:
+                my_ip = my_ips[connection_id]
+            else:
+                my_ip = '*'
+            my_user = my_nick + '!' + my_ident + '@' + my_ip
+            objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
+                                       .replace('*', '.*').replace('[', r'\[').replace('|', r'\|')
 
-        if search(objective_regex, my_user):
-            for user in hexchat.get_list('users'):
-                if user.nick == my_nick:
-                    if user.prefix == '@':
-                        hexchat.command(f'mode e {objective}')
-                    break
+            if search(objective_regex, my_user):
+                for user in hexchat.get_list('users'):
+                    if user.nick == my_nick:
+                        if user.prefix == '@':
+                            hexchat.command(f'mode e {objective}')
+                        break
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
