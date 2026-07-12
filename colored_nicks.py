@@ -85,9 +85,18 @@ def server_text(word, word_eol, userdata):
     # hexchat.prnt('Server Text')
     # hexchat.prnt(', '.join(word))
 
-    printout = '*\t' + hexchat.strip(word[0])
+    printout = hexchat.strip(word[0])
 
-    context = server_context(hexchat.get_prefs('id'))
+    connection_id = hexchat.get_prefs('id')
+    if search('^#[^ ]+ :End of [cC]hannel ((banexception)|(ban)) [lL]ist.$', printout):
+        channel = search('^#[^ ]+', printout).group()
+        context = channel_context(connection_id, channel)
+        printout = color + ban_color + printout + reset
+    else:
+        context = server_context(connection_id)
+
+    printout = '*\t' + printout
+
     context.prnt(printout)
     return hexchat.EAT_HEXCHAT
 
