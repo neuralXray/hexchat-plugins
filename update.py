@@ -34,7 +34,7 @@ irc_nick2 = 'irc_nick2 = '
 irc_nick3 = 'irc_nick3 = '
 irc_user_name = 'irc_user_name = '
 irc_real_name = 'irc_real_name = '
-n_length = 4
+n_length = 5
 ident_length = 9
 digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 characters = digits + ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
