@@ -107,7 +107,7 @@ def your_message(word, word_eol, userdata):
 def channel_message(word, word_eol, userdata):
     # hexchat.prnt('Your Message / Channel Message')
     # hexchat.prnt(', '.join(word))
-    my_nick = hexchat.get_info('nick').replace('\\', '\\\\').replace('[', '\[').replace('|', '\|')
+    my_nick = hexchat.get_info('nick').replace('\\', '\\\\').replace('[', r'\[').replace('|', r'\|')
 
     my_nick_regex = '(?<![a-z])' + my_nick + '(?![a-z])'
     if search(my_nick_regex, word[1], flags=IGNORECASE):
@@ -233,7 +233,7 @@ def channel_action(word, word_eol, userdata):
     # /ME msg
     # hexchat.prnt('Your Action / Channel Action')
     # hexchat.prnt(', '.join(word))
-    my_nick = hexchat.get_info('nick').replace('\\', '\\\\').replace('[', '\[').replace('|', '\|')
+    my_nick = hexchat.get_info('nick').replace('\\', '\\\\').replace('[', r'\[').replace('|', r'\|')
     my_nick_regex = '(?<![a-z])' + my_nick + '(?![a-z])'
     if search(my_nick_regex, word[1], flags=IGNORECASE):
         if len(word) > 2:
@@ -1132,7 +1132,7 @@ def channel_invite(word, word_eol, userdata):
     hexchat.prnt(printout)
     my_nick, my_username, my_host = my_nick_host()
     my_user = f'{my_nick}!{my_username}@{my_host}'
-    if search(recipient.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+    if search(recipient.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.').replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
@@ -1159,7 +1159,7 @@ def channel_remove_invite(word, word_eol, userdata):
     hexchat.prnt(printout)
     my_nick, my_username, my_host = my_nick_host()
     my_user = f'{my_nick}!{my_username}@{my_host}'
-    if search(recipient.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+    if search(recipient.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.').replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
@@ -1240,7 +1240,7 @@ def channel_quiet(word, word_eol, userdata):
     hexchat.prnt(printout)
     my_nick, my_username, my_host = my_nick_host()
     my_user = f'{my_nick}!{my_username}@{my_host}'
-    if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+    if search(objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.').replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
@@ -1271,7 +1271,7 @@ def channel_unquiet(word, word_eol, userdata):
     hexchat.prnt(printout)
     my_nick, my_username, my_host = my_nick_host()
     my_user = f'{my_nick}!{my_username}@{my_host}'
-    if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+    if search(objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.').replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
@@ -1319,8 +1319,8 @@ def channel_ban(word, word_eol, userdata):
     if ':' not in objective:
         my_nick, my_username, my_host = my_nick_host()
         my_user = f'{my_nick}!{my_username}@{my_host}'
-        if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
-                  .replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+        if search(objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
+                  .replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
             hexchat.command('GUI COLOR 3')
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
@@ -1369,8 +1369,8 @@ def channel_unban(word, word_eol, userdata):
     if ':' not in objective:
         my_nick, my_username, my_host = my_nick_host()
         my_user = f'{my_nick}!{my_username}@{my_host}'
-        if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
-                  .replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+        if search(objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
+                  .replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
             hexchat.command('GUI COLOR 3')
             connection_id = hexchat.get_prefs('id')
             channel = hexchat.get_info('channel')
@@ -1486,7 +1486,7 @@ def channel_exempt(word, word_eol, userdata):
     hexchat.prnt(printout)
     my_nick, my_username, my_host = my_nick_host()
     my_user = f'{my_nick}!{my_username}@{my_host}'
-    if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+    if search(objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.').replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')
@@ -1513,7 +1513,7 @@ def channel_remove_exempt(word, word_eol, userdata):
     hexchat.prnt(printout)
     my_nick, my_username, my_host = my_nick_host()
     my_user = f'{my_nick}!{my_username}@{my_host}'
-    if search(objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.').replace('*', '.*').replace('[', '\[').replace('|', '\|'), my_user):
+    if search(objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.').replace('*', '.*').replace('[', r'\[').replace('|', r'\|'), my_user):
         hexchat.command('GUI COLOR 3')
         connection_id = hexchat.get_prefs('id')
         channel = hexchat.get_info('channel')

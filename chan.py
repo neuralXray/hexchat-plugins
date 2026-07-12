@@ -39,7 +39,7 @@ is_colored_nicks_loaded = colored_nicks_loaded()
 
 channel_regex = '#[^ ]*'
 wait_rejoin_regex = 'You must wait [0-9]+ seconds after being kicked to rejoin '\
-                    '\(\+J is set\)'
+                    r'\(\+J is set\)'
 
 
 def join_thread(channel, seconds, context):
@@ -284,9 +284,9 @@ def channel_ban(word, word_eol, userdata):
                     else:
                         my_ip = '*'
                     my_user = my_nick + '!' + my_ident + '@' + my_ip
-                    objective_regex = objective.replace('\\', '\\\\').replace('.', '\.')\
+                    objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.')\
                                                .replace('?', '.').replace('*', '.*')\
-                                               .replace('[', '\[').replace('|', '\|')
+                                               .replace('[', r'\[').replace('|', r'\|')
 
                     if search(objective_regex, my_user):
                         if '.' in entity:
@@ -429,8 +429,8 @@ def join(word, word_eol, userdata):
 
     if key in akick.keys():
         for value in akick[key]:
-            value_regex = value.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
-                               .replace('*', '.*').replace('[', '\[').replace('|', '\|')
+            value_regex = value.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
+                               .replace('*', '.*').replace('[', r'\[').replace('|', r'\|')
             if search(value_regex, host):
                 hexchat.command(f'kick {nick}')
 
@@ -479,8 +479,8 @@ def channel_exempt(word, word_eol, userdata):
 
         if key in akick.keys():
             objective = word[1]
-            objective_regex = objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
-                                       .replace('*', '.*').replace('[', '\[').replace('|', '\|')
+            objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
+                                       .replace('*', '.*').replace('[', r'\[').replace('|', r'\|')
 
             if any([bool(search(objective_regex, ak)) for ak in akick[key]]) or \
                any([bool(search(ak, objective)) for ak in akick[key]]):
@@ -510,8 +510,8 @@ def channel_remove_exempt(word, word_eol, userdata):
         else:
             my_ip = '*'
         my_user = my_nick + '!' + my_ident + '@' + my_ip
-        objective_regex = objective.replace('\\', '\\\\').replace('.', '\.').replace('?', '.')\
-                                   .replace('*', '.*').replace('[', '\[').replace('|', '\|')
+        objective_regex = objective.replace('\\', '\\\\').replace('.', r'\.').replace('?', '.')\
+                                   .replace('*', '.*').replace('[', r'\[').replace('|', r'\|')
 
         if search(objective_regex, my_user):
             for user in hexchat.get_list('users'):
