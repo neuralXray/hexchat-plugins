@@ -338,6 +338,10 @@ def private_message(word, word_eol, userdata):
         if search(f'Se eliminaron [0-9]+ bans que afectaban al usuario {my_nick} en #', msg):
             channel = msg[msg.find('#'):]
             hexchat.command(f'join {channel}')
+        elif (msg == '[ERROR] Acceso denegado (-2007)') and bool(op_returned):
+            for channel in op_returned.keys():
+                if not op_returned[channel]:
+                    hexchat.command(f'cycle {channel}')
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
