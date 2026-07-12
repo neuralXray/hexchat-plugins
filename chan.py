@@ -205,9 +205,8 @@ def banned(word, word_eol, userdata):
     my_nick = hexchat.get_info('nick')
     key = (chat, my_nick.lower())
 
-    if key in channels.keys():
-        if channel in channels[key]:
-            hexchat.command(f'msg CHaN unban {channel}')
+    if (key in channels.keys()) and (channel in channels[key]):
+        hexchat.command(f'msg CHaN unban {channel}')
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
