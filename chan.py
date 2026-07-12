@@ -82,7 +82,12 @@ def your_nick_changing(word, word_eol, userdata):
     if key in channels.keys():
         channel = hexchat.get_info('channel').lower()
         if channel in channels[key]:
-            hexchat.command(f'msg CHaN op {channel} {new_nick}')
+            for user in hexchat.get_list('users'):
+                if user.nick == new_nick:
+                    if user.prefix != '@':
+                        hexchat.command(f'msg CHaN op {channel} {new_nick}')
+                    else:
+                        break
 
     if is_colored_nicks_loaded:
         return hexchat.EAT_HEXCHAT
