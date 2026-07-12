@@ -21,7 +21,7 @@ from time import sleep
 
 
 logs_directory = configdir + '/logs/'
-additional_logs_directory = expanduser('~/Documents/IRC/logger/logs/')
+additional_logs_directory = ''#expanduser('~/Documents/IRC/logger/logs/')
 
 
 is_colored_nicks_loaded = colored_nicks_loaded()
@@ -57,7 +57,7 @@ def search_thread():
                         else:
                             col_nick = nick
                         nick_history = [colored_nick(n) for n in nick_history]
-                    printout = printout_nick_history(nick_history, ident_history, col_nick, ident, ip)
+                    printout = printout_nick_history(nick_history, ident_history, col_nick, ident, ip, host)
                     printout_queue.append(printout)
                 if channel_history:
                     printout = printout_channel_history(channel_history, col_nick)
@@ -77,7 +77,7 @@ def search_thread():
                             col_nick = colored_nick(nick)
                         else:
                             col_nick = nick
-                    printout = f'*\t[{col_nick}!{ident}@{ip}] Not seen'
+                    printout = printout_nick_history(nick_history, ident_history, col_nick, ident, ip, host)
                     printout_queue.append(printout)
 
                 if is_colored_nicks_loaded:
@@ -123,6 +123,8 @@ def search(word, word_eol, userdata):
             months = int(word[2])
         except ValueError:
             return hexchat.EAT_ALL
+    elif additional_logs_directory:
+        months = 2
     else:
         months = 1
 
@@ -135,11 +137,15 @@ def search(word, word_eol, userdata):
             ident = user[i + 1:j]
             ip = user[j + 1:]
 
-            host = hexchat.get_info('host')
             connection_id = hexchat.get_prefs('id')
-            logs_dir = additional_logs_directory + host + '/'
+            if additional_logs_directory:
+                chat = hexchat.get_info('host')
+                logs_dir = additional_logs_directory + chat + '/'
+            else:
+                chat = hexchat.get_info('network').lower()
+                logs_dir = logs_directory + chat + '/'
 
-            search_id = (nick, ident, ip, host, logs_dir, months, connection_id)
+            search_id = (nick, ident, ip, chat, logs_dir, months, connection_id)
             if search_id not in search_queue:
                 search_queue.append(search_id)
 

@@ -157,29 +157,37 @@ def get_complete_chanopt(context, connection_id, channel, global_option, option_
             return False
 
 
-def printout_nick_history(nick_history, ident_history, nick='', ident='', ip=''):
+def printout_nick_history(nick_history, ident_history, nick='', ident='', ip='', chat=''):
     if bool(nick) & bool(ident) & bool(ip):
-        printout = f'*\t[{nick}!{ident}@{ip}] '
+        printout = f'*\t[{nick}!{ident}@{ip}'
+        if (chat == 'irc.chathispano.com') and \
+           (ip.endswith('.SCpM0M.virtual') or ip.endswith('.jp96d8.virtual') or \
+            ip.endswith('.U3h85d.virtual')):
+            printout = f'{printout} (WARNING! CGNAT)'
+        printout = f'{printout}] '
     else:
         printout = ''
 
-    list_ident_history = sum(ident_history.values(), [])
-    if (len(set(list_ident_history)) == 1) and \
-       (len(nick_history) == len(list_ident_history)) and \
-       (len(nick_history) > 1):
-        nick_history[-1] = f'{nick_history[-1]} ! {list_ident_history[0]}'
-    else:
-        nick_history = [n if (hexchat.strip(n) in ident_history.keys()) and \
-                             (len(ident_history[hexchat.strip(n)]) == 1) and \
-                             (ident_history[hexchat.strip(n)][0] == '*') else
-                        f'{n}!{ident_history[hexchat.strip(n)][0]}'
-                        if (hexchat.strip(n) in ident_history.keys()) and \
-                           (len(ident_history[hexchat.strip(n)]) == 1) else
-                        f'{n}!{",".join([ident for ident in ident_history[hexchat.strip(n)] if ident != "*"])}'
-                        if hexchat.strip(n) in ident_history.keys() else
-                        n for n in nick_history]
+    if nick_history:
+        list_ident_history = sum(ident_history.values(), [])
+        if (len(set(list_ident_history)) == 1) and \
+           (len(nick_history) == len(list_ident_history)) and \
+           (len(nick_history) > 1):
+            nick_history[-1] = f'{nick_history[-1]} ! {list_ident_history[0]}'
+        else:
+            nick_history = [n if (hexchat.strip(n) in ident_history.keys()) and \
+                                 (len(ident_history[hexchat.strip(n)]) == 1) and \
+                                 (ident_history[hexchat.strip(n)][0] == '*') else
+                            f'{n}!{ident_history[hexchat.strip(n)][0]}'
+                            if (hexchat.strip(n) in ident_history.keys()) and \
+                               (len(ident_history[hexchat.strip(n)]) == 1) else
+                            f'{n}!{",".join([ident for ident in ident_history[hexchat.strip(n)] if ident != "*"])}'
+                            if hexchat.strip(n) in ident_history.keys() else
+                            n for n in nick_history]
 
-    printout = printout + 'Nick(s): ' + ', '.join(nick_history)
+        printout = printout + 'Nick(s): ' + ', '.join(nick_history)
+    else:
+        printout = printout + 'Not seen'
 
     return printout
 
